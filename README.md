@@ -10,7 +10,7 @@ Before git pull:
 	git status -> check what is changed
 	
 For removing the checkpoints:
-	git rm <PATH> 
+	git rm <PATH for the checkpoint> 
 
 I added the checkpoints into the .gitignore file, so when we add changed files to the repository we just use:
 	git add -u
