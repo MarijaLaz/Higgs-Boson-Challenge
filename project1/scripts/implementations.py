@@ -4,10 +4,10 @@
 import numpy as np
 
 
-def least_squares GD(y, tx, initial w, max iters, gamma):
+def least_squares_GD(y, tx, initial w, max iters, gamma):
     #Linear regression using gradient descent
 
-def least_squares SGD(y, tx, initial w, max iters, gamma):
+def least_squares_SGD(y, tx, initial w, max iters, gamma):
     #Linear regression using stochastic gradient descent
 
 def least_squares(y, tx):
