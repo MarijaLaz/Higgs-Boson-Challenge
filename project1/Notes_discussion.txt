@@ -1,0 +1,6 @@
+Notes for project
+
+
+Deborah:
+- which loss function to use? mse, rmse? 
+- will we do a function for the losses  (costs.py) that we will call in other functions? If so, change in implementation fcts

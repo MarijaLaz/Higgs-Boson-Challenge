@@ -3,20 +3,20 @@
 
 def compute_loss(y, tx, w):
     """Calculate the loss.
-
-    You can calculate the loss using mse or mae.
+    You can calculate the loss using mse or mae or rmse
     """
-    # ***************************************************
-    # MSE
-    #X = [1, tx]
-    N = y.shape[0]
-    error = y - tx.dot(w)
-    Loss = (1/(2.0*N))*np.inner(error, error)
-
-    # TODO: compute loss by MAE
-    # ***************************************************
-    return Loss
     
-    raise NotImplementedError
+    # compute loss by MSE
+    error = y - tx.dot(w)
+    Loss = np.mean(e**2)/2
+
+    # compute loss by MAE
+    
+    
+    #compute loss by RMSE
+    
+    
+    
+    return Loss
     
  
