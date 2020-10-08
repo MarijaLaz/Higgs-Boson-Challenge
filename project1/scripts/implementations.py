@@ -16,7 +16,7 @@ def compute_loss_MAE(y, tx, w):
     return np.sum(abs(y-tx@w))/(y.shape[0])
 
 #----------------------------------------------------------
-# Gradients 
+# Gradients & Regressions
 
 def compute_gradient(y, tx, w):
     """Compute the gradient."""
@@ -59,8 +59,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
             ws.append(w)
             losses.append(loss)
     return ws[max_iters-1], losses[max_iters-1]
-    
-#********************************************************************    
+       
     
 def least_squares(y, tx):
     """Least squares regression using normal equations"""
@@ -69,7 +68,6 @@ def least_squares(y, tx):
     return w,loss
 
 
-#********************************************************************
 
 def ridge_regression(y, tx, lambda_):
     #Ridge regression using normal equations
@@ -86,14 +84,43 @@ def ridge_regression(y, tx, lambda_):
     
     return mse, w_ridge
 
-#********************************************************************
+
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """Logistic regression using gradient descent or SGD"""
 
 def reg_logistic_regressions(y, tx, lambda_, initial_w, max_iters, gamma):
     """Regularized logistic regression using gradient descent or SGD"""
+
     
+    
+#----------------------------------------------------------
+#Feature processing
+
+def build_poly(x, degree):
+    """polynomial basis functions for input data x, for j=0 up to j=degree."""
+    
+    phi = np.zeros((x.shape[0], degree+1)) #degree + 1 because we want to go from 0 to degree
+    for d in range(degree+1):   
+         phi[:,d] = x**d
+    return phi
+    
+
+def split_data(x, y, ratio, seed=1):
+    """split the dataset based on the split ratio."""
+    # set seed
+    np.random.seed(seed)
+    r = int(ratio*x.shape[0])
+    indices = np.random.permutation(np.arange(x.shape[0]))
+    training_idx, test_idx = indices[:r], indices[r:]
+   
+    x_train = x[training_idx]
+    y_train = y[training_idx]
+    x_test = x[test_idx]
+    y_test = y[test_idx]
+    
+    return x_train, y_train, x_test, y_test
+
 #----------------------------------------------------------
 # Helpers 
 
