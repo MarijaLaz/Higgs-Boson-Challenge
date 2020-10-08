@@ -27,3 +27,9 @@ Validating
 
 
 Predicting
+
+
+Submissions on Alcrowd:(adding by last sumbited)
+
+->18th place ridge_regression(y,tx,0.00001) tx->original data
+->25th place ridge_regression(y,tx_train_filtered,1e-06) tx_train_filtered->filtered and not standardized data

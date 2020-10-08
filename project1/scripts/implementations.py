@@ -82,7 +82,7 @@ def ridge_regression(y, tx, lambda_):
     err = y-tx.dot(w_ridge)
     mse = np.mean(err**2)/2
     
-    return mse, w_ridge
+    return w_ridge, mse
 
 
 
