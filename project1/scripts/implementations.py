@@ -4,7 +4,6 @@
 import numpy as np
 
 
-<<<<<<< HEAD
 #----------------------------------------------------------
 # Loss Functions
 
@@ -60,41 +59,15 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
             ws.append(w)
             losses.append(loss)
     return ws[max_iters-1], losses[max_iters-1]
-=======
-def least_squares_GD(y, tx, initial w, max_iters, gamma):
-    #Linear regression using gradient descent
-
-def least_squares_SGD(y, tx, initial w, max_iters, gamma):
-    #Linear regression using stochastic gradient descent
->>>>>>> 30da2a019eebcc55809fb5263d127ec61a002ebd
-
     
 #********************************************************************    
     
 def least_squares(y, tx):
-<<<<<<< HEAD
     """Least squares regression using normal equations"""
     w = np.linalg.solve(tx.T@tx,tx.T@y)
     loss = compute_loss_MSE(y, tx, w)
     return w,loss
 
-def ridge_regression(y, tx, lambda_):
-    """Ridge regression using normal equations"""
-    w = np.linalg.solve(tx.T@tx+lambda_*np.identity(tx.shape[1]),tx.T@y)
-    loss = compute_loss_MSE(y, tx, w) 
-    return w, loss
-=======
-    #Least squares regression using normal equations
-    A = tx.T @ tx
-    b = tx.T @ y
-    w = np.linalg.solve(A,b)
-    
-    #calculate loss with mse
-    e = y - tx @ w
-    mse =  np.mean(e**2)/2
-    
-    # returns mse, and optimal weights
-    return mse, w
 
 #********************************************************************
 
@@ -107,14 +80,13 @@ def ridge_regression(y, tx, lambda_):
     B = tx.T@y
     w_ridge = np.linalg.solve(A,B)
     
+    #calculate loss with mse
     err = y-tx.dot(w_ridge)
     mse = np.mean(err**2)/2
     
     return mse, w_ridge
 
 #********************************************************************
-
->>>>>>> 30da2a019eebcc55809fb5263d127ec61a002ebd
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """Logistic regression using gradient descent or SGD"""
