@@ -12,7 +12,8 @@ Feature processing
 - Standardization
     - No standardization is needed for regression models -> stadardize would change de matrix and give possibly the wrong w
     - Standardization should be used only for GD types of models
-- Feature expansion ? 
+- Feature expansion (to be done)
+- clean the data: replace the outliners and non-found values (-999) by the mean of the column
 
 
 Apply methods
@@ -27,6 +28,7 @@ Validating
 
 
 Predicting
+- all code is given
 
 
 Submissions on Alcrowd:(adding by last sumbited)
