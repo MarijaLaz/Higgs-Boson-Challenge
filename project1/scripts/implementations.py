@@ -122,7 +122,44 @@ def split_data(x, y, ratio, seed=1):
     return x_train, y_train, x_test, y_test
 
 #----------------------------------------------------------
-# Helpers 
+# Cross Validation
+
+def cross_validation(y, x, k_indices, k, lambda_, degree):
+    """return the loss of ridge regression."""
+    # get k'th subgroup in test, others in train
+    test_idx = k_indices[k]
+    idx_tr = np.arange(len(k_indices))
+    train_idx = k_indices[idx_tr != k]
+    train_idx = train_idx.flatten()
+
+    # form data with polynomial degree
+    x_tr = build_poly(x[train_idx], degree)
+    x_te = build_poly(x[test_idx], degree)
+    y_tr = y[train_idx]
+    y_te = y[test_idx]
+
+    # ridge regression
+    mse, w_r = ridge_regression(y_tr, x_tr, lambda_)
+
+    # calculate the loss for train and test data
+    loss_tr = np.sqrt(2*compute_mse(y_tr, x_tr, w_r))
+    loss_te = np.sqrt(2*compute_mse(y_te, x_te, w_r))
+
+    return loss_tr, loss_te
+
+def build_k_indices(y, k_fold, seed):
+    """build k indices for k-fold."""
+    num_row = y.shape[0]
+    interval = int(num_row / k_fold)
+    np.random.seed(seed)
+    indices = np.random.permutation(num_row)
+    k_indices = [indices[k * interval: (k + 1) * interval]
+                 for k in range(k_fold)]
+    return np.array(k_indices)
+
+
+#----------------------------------------------------------
+# Helpers
 
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     """
