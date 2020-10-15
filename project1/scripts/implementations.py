@@ -100,9 +100,9 @@ def reg_logistic_regressions(y, tx, lambda_, initial_w, max_iters, gamma):
 def build_poly(x, degree):
     """polynomial basis functions for input data x, for j=0 up to j=degree."""
     
-    phi = np.zeros((x.shape[0], degree+1)) #degree + 1 because we want to go from 0 to degree
+    phi = np.zeros((x.shape[0], 1)) #degree + 1 because we want to go from 0 to degree
     for d in range(degree+1):   
-         phi[:,d] = x**d
+         phi = np.c_[phi, x**d]
     return phi
     
 
@@ -139,11 +139,11 @@ def cross_validation(y, x, k_indices, k, lambda_, degree):
     y_te = y[test_idx]
 
     # ridge regression
-    mse, w_r = ridge_regression(y_tr, x_tr, lambda_)
+    w_r, mse = ridge_regression(y_tr, x_tr, lambda_)
 
     # calculate the loss for train and test data
-    loss_tr = np.sqrt(2*compute_mse(y_tr, x_tr, w_r))
-    loss_te = np.sqrt(2*compute_mse(y_te, x_te, w_r))
+    loss_tr = compute_loss_MSE(y_tr, x_tr, w_r)
+    loss_te = compute_loss_MSE(y_te, x_te, w_r)
 
     return loss_tr, loss_te
 
