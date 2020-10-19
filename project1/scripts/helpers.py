@@ -1,5 +1,7 @@
 import numpy as np
 import scipy
+from implementations import *
+from proj1_helpers import *
 
 #----------------------------------------------------------
 # Loss Functions
@@ -12,7 +14,7 @@ def compute_loss_MAE(y, tx, w):
     """Calculate the loss MAE"""
     return np.sum(abs(y-tx@w))/(y.shape[0])
 
-def calculate_loss(y, tx, w):
+def calculate_loss_LG(y, tx, w):
     """compute the loss: negative log likelihood."""
     sig = sigmoid(np.dot(tx,w))
     A = y.T.dot(np.log(sig))
@@ -32,8 +34,8 @@ def compute_stoch_gradient(y, tx, w):
     e = y - np.dot(tx, w)
     return -1./float(y.shape[0]) * np.dot(tx.T, e)
 
-def calculate_gradient(y, tx, w):
-    """compute the gradient of loss."""
+def calculate_gradient_LR(y, tx, w):
+    """compute the gradient of loss for Logistic Regression models."""
     return tx.T@(sigmoid(tx@w)-y)
 
 
@@ -85,7 +87,7 @@ def split_data(x, y, ratio, seed=1):
 #----------------------------------------------------------
 # Cross Validation
 
-def cross_validation(y, x, k_indices, k, initial_w, lambda_, max_iters, gamma, degree):
+def cross_validation(y, x, k_indices, k, initial_w, model_name, max_iters=0, gamma=0, lambda_=0):
     """return the loss of ridge regression."""
     # get k'th subgroup in test, others in train
     test_idx = k_indices[k]
@@ -94,20 +96,43 @@ def cross_validation(y, x, k_indices, k, initial_w, lambda_, max_iters, gamma, d
     train_idx = train_idx.flatten()
 
     # form data with polynomial degree
-    x_tr = build_poly(x[train_idx], degree)
-    x_te = build_poly(x[test_idx], degree)
+    #x_tr = build_poly(x[train_idx], degree)
+    #x_te = build_poly(x[test_idx], degree)
+    x_tr = x[train_idx]
+    x_te = x[test_idx]
     y_tr = y[train_idx]
     y_te = y[test_idx]
 
-    # ridge regression
-    initial_w = np.zeros(x_tr.shape[1])
-    w_r, mse = reg_logistic_regressions(y_tr, x_tr, lambda_, initial_w, max_iters, gamma)
+    # applying the model 
+    #initial_w = np.zeros(x_tr.shape[1])
+    if(model_name == 'least_squares_GD'):
+                w_star, mse = least_squares_GD(y_tr, x_tr, initial_w, max_iters, gamma)
+    elif(model_name == 'least_squares_SGD'):
+                w_star, mse = least_squares_SGD(y_tr, x_tr, initial_w, max_iters, gamma)
+    elif(model_name == 'least_squares'):
+                w_star, mse = least_squares(y_tr, x_tr)
+    elif(model_name == 'ridge_regression'):
+                w_star, mse = ridge_regression(y_tr, x_tr, lambda_)
+    elif(model_name == 'logistic_regression'):
+                w_star, mse = logistic_regression(y_tr, x_tr, initial_w, max_iters, gamma)
+    elif(model_name == 'reg_logistic_regressions'):
+                w_star, mse = reg_logistic_regressions(y_tr, x_tr, lambda_, initial_w, max_iters, gamma)
+                
 
     # calculate the loss for train and test data
-    loss_tr = compute_loss_MSE(y_tr, x_tr, w_r)
-    loss_te = compute_loss_MSE(y_te, x_te, w_r)
+    if(model_name == 'logistic_regression' or model_name == 'reg_logistic_regressions'):
+        #loss_tr = calculate_loss_LG(y_tr, x_tr, w_star)
+        loss_te = calculate_loss_LG(y_te, x_te, w_star)
+        mod_pred = predict_labels(w_star, x_te)
+        acc = calculate_accuracy(mod_pred, y_te)
+    else:
+        #loss_tr = compute_loss_MSE(y_tr, x_tr, w_star)
+        loss_te = compute_loss_MSE(y_te, x_te, w_star)
+        mod_pred = predict_labels(w_star, x_te)
+        acc = calculate_accuracy(mod_pred, y_te)
 
-    return loss_tr, loss_te
+    return acc, loss_te
+                
 
 def build_k_indices(y, k_fold, seed):
     """build k indices for k-fold."""
@@ -118,6 +143,15 @@ def build_k_indices(y, k_fold, seed):
     k_indices = [indices[k * interval: (k + 1) * interval]
                  for k in range(k_fold)]
     return np.array(k_indices)
+
+def calculate_accuracy(mod_pred, y):
+    """Calculates the accuracy of the method"""
+    count = 0
+    for i, y_true in enumerate(y):
+        if y_true == mod_pred[i]:
+            count += 1
+
+    return count/len(y)
 
 
 #----------------------------------------------------------
