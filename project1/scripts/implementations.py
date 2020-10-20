@@ -81,7 +81,7 @@ def reg_logistic_regressions(y, tx, lambda_, initial_w, max_iters, gamma):
     losses = []
     w = initial_w
     for n_iter in range(max_iters):
-        gradient = calculate_gradient_LR(y, tx, w)+2*lambda_*np.linalg.norm(w)
+        gradient = calculate_gradient_LR(y, tx, w) + 2*lambda_*w
         w = w - gamma * gradient
         loss =  calculate_loss_LG(y, tx, w)+ lambda_*np.linalg.norm(w)
         # store w and loss

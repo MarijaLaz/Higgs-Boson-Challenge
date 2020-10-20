@@ -19,7 +19,8 @@ def calculate_loss_LG(y, tx, w):
     sig = sigmoid(np.dot(tx,w))
     A = y.T.dot(np.log(sig))
     B = (1-y).T.dot(np.log(1-sig))
-    return -(A+B)
+
+    return np.squeeze(-(A+B))
 
 #----------------------------------------------------------
 # Gradients 
