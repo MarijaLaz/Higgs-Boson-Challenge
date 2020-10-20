@@ -22,6 +22,14 @@ def calculate_loss_LG(y, tx, w):
 
     return np.squeeze(-(A+B))
 
+#np.sum(-y * x * theta.T) + np.sum(np.exp(x * theta.T))+ np.sum(np.log(y))
+'''y.shape = (-1, 1)
+    pred = tx.dot(w)
+    # calculate log[1 + e^(pred)]
+    term1 = np.logaddexp(0, pred)
+    # element-wise multiplication
+    term2 = np.multiply(y, pred)
+    loss = np.sum(term1-term2)'''
 #----------------------------------------------------------
 # Gradients 
 
@@ -42,7 +50,8 @@ def calculate_gradient_LR(y, tx, w):
 
 def sigmoid(t):
     """apply the sigmoid function on t."""
-    e_t =scipy.special.expit(-t)
+    #e_t =scipy.special.expit(-t)
+    e_t =np.exp(-t)
     return 1./(1.+e_t)
 
 
@@ -116,12 +125,12 @@ def cross_validation(y, x, k_indices, k, initial_w, model_name, max_iters=0, gam
                 w_star, mse = ridge_regression(y_tr, x_tr, lambda_)
     elif(model_name == 'logistic_regression'):
                 w_star, mse = logistic_regression(y_tr, x_tr, initial_w, max_iters, gamma)
-    elif(model_name == 'reg_logistic_regressions'):
-                w_star, mse = reg_logistic_regressions(y_tr, x_tr, lambda_, initial_w, max_iters, gamma)
+    elif(model_name == 'reg_logistic_regression'):
+                w_star, mse = reg_logistic_regression(y_tr, x_tr, lambda_, initial_w, max_iters, gamma)
                 
 
     # calculate the loss for train and test data
-    if(model_name == 'logistic_regression' or model_name == 'reg_logistic_regressions'):
+    if(model_name == 'logistic_regression' or model_name == 'reg_logistic_regression'):
         #loss_tr = calculate_loss_LG(y_tr, x_tr, w_star)
         loss_te = calculate_loss_LG(y_te, x_te, w_star)
         mod_pred = predict_labels(w_star, x_te)

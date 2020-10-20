@@ -75,7 +75,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     return ws[-1],losses[-1]
 
 
-def reg_logistic_regressions(y, tx, lambda_, initial_w, max_iters, gamma):
+def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     """Regularized logistic regression using gradient descent or SGD"""
     ws = [initial_w]
     losses = []
