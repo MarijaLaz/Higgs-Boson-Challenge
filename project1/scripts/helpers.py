@@ -16,11 +16,11 @@ def compute_loss_MAE(y, tx, w):
 
 def calculate_loss_LG(y, tx, w):
     """compute the loss: negative log likelihood."""
-    sig = sigmoid(np.dot(tx,w))
-    A = y.T.dot(np.log(sig))
-    B = (1-y).T.dot(np.log(1-sig))
+    twx = tx@w
+    A = -y*twx
+    B = np.logaddexp(0,twx)
 
-    return np.squeeze(-(A+B))
+    return np.sum(A+B)/y.shape[0]
 
 #np.sum(-y * x * theta.T) + np.sum(np.exp(x * theta.T))+ np.sum(np.log(y))
 '''y.shape = (-1, 1)
@@ -51,8 +51,8 @@ def calculate_gradient_LR(y, tx, w):
 def sigmoid(t):
     """apply the sigmoid function on t."""
     #e_t =scipy.special.expit(-t)
-    e_t =np.exp(-t)
-    return 1./(1.+e_t)
+    sig = np.exp(-np.logaddexp(0,-t))
+    return sig
 
 
 def calculate_hessian(y, tx, w):
@@ -133,7 +133,8 @@ def cross_validation(y, x, k_indices, k, initial_w, model_name, max_iters=0, gam
     if(model_name == 'logistic_regression' or model_name == 'reg_logistic_regression'):
         #loss_tr = calculate_loss_LG(y_tr, x_tr, w_star)
         loss_te = calculate_loss_LG(y_te, x_te, w_star)
-        mod_pred = predict_labels(w_star, x_te)
+        mod_pred = predict_labels(w_star, x_te, logistic = True)
+        #mod_pred = (1+mod_pred)/2
         acc = calculate_accuracy(mod_pred, y_te)
     else:
         #loss_tr = compute_loss_MSE(y_tr, x_tr, w_star)
