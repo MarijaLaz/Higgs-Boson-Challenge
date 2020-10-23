@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""function for plot."""
+# given functions for creating plots
+
 import matplotlib.pyplot as plt
 import numpy as np
 from grid_search import get_best_parameters

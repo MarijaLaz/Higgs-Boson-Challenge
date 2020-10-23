@@ -1,8 +1,10 @@
-#Implementation functions
-#all functions return (w, loss)
-from helpers import *
+# mandatory implementation functions
+
 import numpy as np
-import scipy
+from utils.loss_gradient import *
+from utils.helpers import batch_iter
+
+
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma):
@@ -69,7 +71,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     for n_iter in range(max_iters):
         gradient = calculate_gradient_LR(y_, tx, w)
         w = w - gamma * gradient
-        loss =  calculate_loss_LG(y_, tx, w)
+        loss =  compute_loss_LG(y_, tx, w)
         # store w and loss
         ws.append(w)
         losses.append(loss)
@@ -85,7 +87,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     for n_iter in range(max_iters):
         gradient = calculate_gradient_LR(y_, tx, w) + 2*lambda_*w
         w = w - gamma * gradient
-        loss =  calculate_loss_LG(y_, tx, w)+ lambda_*np.linalg.norm(w)
+        loss =  compute_loss_LG(y_, tx, w)+ lambda_*np.linalg.norm(w)
         # store w and loss
         ws.append(w)
         losses.append(loss)
