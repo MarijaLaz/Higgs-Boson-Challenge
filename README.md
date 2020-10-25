@@ -1,35 +1,32 @@
 # Project 1 : Higgs Boson Challenge
 
-Foobar is a Python library for dealing with word pluralization.
+This is a project realised for the Machine Learning Course [CS-433]. We were working on finding the best model for the Higgs Boson Challenge. After testing 6 models we ended up using Logistic Regression for our final submission.
 
 ## Folder Structure
 
 ```
 
 .
-├── data                      # The data sets for the challenge
-│   ├── train.csv.zip
-│   └── test.csv.zip
-├── README.md                 # ReadMe file
-├── results                   # Results for the submission on Kaggle
-│   └── results.csv
-├── run.py                    # Script for 
-└── scripts
-    ├── cross_jet_0.txt
-    ├── ploting.py
-    ├── project1.ipynb
-    ├── Split_Jet.ipynb
-    ├── split_jet.py
-    ├── testing_parameters.py
-    ├── Test_Models.ipynb
-    └── utils
-        ├── crossvalidation.py
-        ├── features.py
-        ├── helpers.py
-        ├── implementations.py
-        ├── loss_gradient.py
-        ├── plots.py
-        └── preprocessing.py
+├── data                               # The train and test data sets
+│   ├── test.csv.zip
+│   └── train.csv.zip
+├── results                            # Final results for submission
+│   └── results_final.csv
+├── hyperparameterTestResult.txt       # Results for the hyperparameters after crossvalidation
+├── Report.pdf                         # The report
+├── README.md                          # The ReadMe file
+├── run.py                             # Script for training the models with the train set and get predictions for the test set
+├── scripts                            # Scripts used for testing the models and analysis of the data
+│   ├── dataAnalysisPlot.py
+│   ├── testing_parameters.py
+│   └── Test_Models.ipynb
+└── utils                              # The functions used in the scripts
+    ├── crossvalidation.py             # Functions for performing crossvalidation
+    ├── features.py                    # Dictionaries containing infromations for the columns
+    ├── helpers.py                     # Helping functions
+    ├── implementations.py             # Mandatory functions
+    ├── loss_gradient.py               # Functions for the computing the loss and the gradients
+    └── preprocessing.py               # Functions for feature preprocessing
 
 ```
 
