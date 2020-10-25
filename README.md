@@ -47,6 +47,10 @@ python3 run.py
 
 The final results after running the run.py script can be found in the **results** folder under the name *results.csv*
 
+## AICrowd
+
+Our final results on AIcrowd gave a 0.814 accuracy .
+
 ## Authors
 * Marija Lazaroska     
 * Deborah Scherrer Ma  
