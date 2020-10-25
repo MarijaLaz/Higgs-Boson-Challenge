@@ -12,11 +12,11 @@ This is a project realised for the Machine Learning Course [CS-433]. We were wor
 │   └── train.csv.zip
 ├── results                            # Final results for submission
 │   └── results_final.csv
-├── hyperparameterTestResult.txt       # Results for the hyperparameters after crossvalidation
 ├── Report.pdf                         # The report
 ├── README.md                          # The ReadMe file
 ├── run.py                             # Script for training the models with the train set and get predictions for the test set
 ├── scripts                            # Scripts used for testing the models and analysis of the data
+│   ├── hyperparameterTestResult.txt   # Results for the hyperparameters after crossvalidation
 │   ├── dataAnalysisPlot.py
 │   ├── testing_parameters.py
 │   └── Test_Models.ipynb
