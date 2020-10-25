@@ -40,8 +40,7 @@ x_test = addingFeatures(x_test)
 
 
 MAX_ITER = 2000
-lambdas = [1000.0, 0.001, 100.0, 0.001, 100.0, 100.0, 0.001, 100.0]
-GAMMA = 1e-6
+gammas = [1e-05, 1e-05, 1e-05, 1e-05, 1e-05, 1e-05, 0.001, 1e-05]
 degrees = [3,3,3,3,3,3,3,3]
 
 print("Finding the best weights and calculating predictions...")
@@ -65,7 +64,7 @@ for jet_num in range (8):
 	initial_w = np.random.randn(x_train[jet_num].shape[1])
 	
 	# training the model
-	w, loss = logistic_regression(y_train[jet_num], x_train[jet_num], initial_w, MAX_ITER, GAMMA)
+	w, loss = logistic_regression(y_train[jet_num], x_train[jet_num], initial_w, MAX_ITER, gammas[jet_num])
 	
 	# applying the w vector to the test data
 	test_results = predict_labels(w, x_test[jet_num], True)

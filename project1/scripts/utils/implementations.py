@@ -5,11 +5,8 @@ from utils.loss_gradient import *
 from utils.helpers import batch_iter
 
 
-
-
 def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """Linear regression using gradient descent"""
-    # Define parameters to store w and loss
     ws = [initial_w]
     losses = []
     w = initial_w
@@ -17,7 +14,6 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
         gradient = compute_gradient(y,tx,w)
         loss = compute_loss_MSE(y,tx,w)
         w = w - gamma * gradient
-        # store w and loss
         ws.append(w)
         losses.append(loss)
     return ws[max_iters-1], losses[max_iters-1]
@@ -33,7 +29,6 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
             gradient = compute_stoch_gradient(y_n, tx_n, w)
             w = w - gamma * gradient
             loss = compute_loss_MSE(y_n, tx_n, w)
-            # store w and loss
             ws.append(w)
             losses.append(loss)
     return ws[max_iters-1], losses[max_iters-1]
@@ -55,7 +50,6 @@ def ridge_regression(y, tx, lambda_):
     A = tx.T@tx + l*I
     B = tx.T@y
     w_ridge = np.linalg.solve(A,B)
-    #calculate loss with mse
     err = y-tx.dot(w_ridge)
     mse = compute_loss_MSE(y, tx, w_ridge)
     return w_ridge, mse
@@ -63,34 +57,35 @@ def ridge_regression(y, tx, lambda_):
 
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
-    """Logistic regression using gradient descent or SGD"""
+    """Logistic regression using gradient descent"""
     ws = [initial_w]
     losses = []
     w = initial_w
+    # changing labels values -1 -> 0, 1 -> 1
     y_ = (1+y)/2
     for n_iter in range(max_iters):
         gradient = calculate_gradient_LR(y_, tx, w)
         w = w - gamma * gradient
         loss =  compute_loss_LG(y_, tx, w)
-        # store w and loss
         ws.append(w)
         losses.append(loss)
     return ws[-1],losses[-1]
 
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
-    """Regularized logistic regression using gradient descent or SGD"""
+    """Regularized logistic regression using gradient descent"""
     ws = [initial_w]
     losses = []
     w = initial_w
+    # changing labels values -1 -> 0, 1 -> 1
     y_ = (1+y)/2
     for n_iter in range(max_iters):
         gradient = calculate_gradient_LR(y_, tx, w) + 2*lambda_*w
         w = w - gamma * gradient
         loss =  compute_loss_LG(y_, tx, w)+ lambda_*np.linalg.norm(w)
-        # store w and loss
         ws.append(w)
         losses.append(loss)
+        # convergence criteria
         if n_iter > 1 and np.abs(losses[-1] - losses[-2]) < 1e-8:
             break
     return ws[-1],losses[-1]
