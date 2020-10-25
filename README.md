@@ -43,7 +43,9 @@ To run our code and get the final predictions you can use the following command:
 ```python
 python3 run.py
 ```
+## Final submission results
 
+The final results after running the run.py script can be found in the **results** folder under the name *results.csv*
 
 ## Authors
 * Marija Lazaroska     
