@@ -6,31 +6,28 @@ from utils.crossvalidation import *
 
 
 
-#load data
-DATA_TRAIN_PATH = '../data/train.csv' #download train data and supply path here 
-y, x, ids = load_csv_data(DATA_TRAIN_PATH)
+# files need to be unziped before load
+DATA_TRAIN_PATH = '../data/train.csv' 
 
-#add constant term
-#tx = np.c_[np.ones((y.shape[0], 1)), x]
 
-print('Shape of y => {sy} \nShape of x => {sx} \n'.format(sy=y.shape, sx=x.shape))
-      
-x_train, indexes = split_jet(x)
-y_train = labels_jet(y, indexes)
+print("Load the data from csv files...")
+y_train, x_train, ids_train = load_csv_data(DATA_TRAIN_PATH)
 
-x_train[0] = removeNaN(x_train[0])
-x_train[1] = removeNaN(x_train[1])
-#no nan values for jet 2 and jet 3
-      
-replaceNaN(x_train[0])
-replaceNaN(x_train[1])
-replaceNaN(x_train[2])
-replaceNaN(x_train[3])
-      
-x_train[0] = standardize(x_train[0])
-x_train[1] = standardize(x_train[1])
-x_train[2] = standardize(x_train[2])
-x_train[3] = standardize(x_train[3])
+
+print('TRAIN : Shape of y => {sy} \n\tShape of x => {sx}'.format(sy=y_train.shape, sx=x_train.shape))
+
+ 
+# splitting the data according to the jet number(0,1,2,3) and then according to the feature DER_mass_MMC
+print("Splitting the train data...")
+x_train, indexes_train = split_jet(x_train)
+x_train, indexes_train = split_mass(x_train, indexes_train)
+y_train = labels_jet(y_train, indexes_train)
+
+
+print("Preprocessing the data...")
+x_train = removeNaN(x_train)
+x_train = addingFeatures(x_train)
+
 
       
 acc_LR = []
@@ -44,8 +41,11 @@ lambda_ = 0.001
 k_fold = 5
 degree = 3
 
-x_train[0] = np.c_[np.ones((y_train[0].shape[0], 1)), x_train[0]]
+print("Standardizing the data...")
+x_train[0], mean, std = standardize(x_train[jet_num])
+print("Poly expand")
 jet_0_tx_poly = build_poly(x_train[0], degree)
+
 initial_w = np.random.randn(jet_0_tx_poly.shape[1]) #np.zeros(jet_0_tx_poly.shape[1])
 
 k_indices = build_k_indices(y_train[0], k_fold, 1)

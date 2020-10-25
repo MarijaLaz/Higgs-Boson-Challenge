@@ -5,68 +5,70 @@ from utils.preprocessing import *
 from utils.crossvalidation import *
 
 
-print("Load the data from csv files...")
-
 # files need to be unziped before load
 DATA_TRAIN_PATH = '../data/train.csv' 
 DATA_TEST_PATH  = '../data/test.csv' 
 OUTPUT_PATH = '../data/results.csv' 
 
+print("Load the data from csv files...")
 y_train, x_train, ids_train = load_csv_data(DATA_TRAIN_PATH)
 y_test, x_test, ids_test = load_csv_data(DATA_TEST_PATH)
 
-print('TRAIN : Shape of y => {sy} \nShape of x => {sx}'.format(sy=y_train.shape, sx=x_train.shape))
-print('TEST  : Shape of y => {sy} \nShape of x => {sx}'.format(sy=y_test.shape, sx=x_test.shape)) 
+# the final predictions
+final = np.ones(y_test.shape)
+
+print('TRAIN : Shape of y => {sy} \n\tShape of x => {sx}'.format(sy=y_train.shape, sx=x_train.shape))
+print('TEST  : Shape of y => {sy} \n\tShape of x => {sx}'.format(sy=y_test.shape, sx=x_test.shape)) 
   
-  
-# splitting the data according to the jet number(0,1,2,3)
+# splitting the data according to the jet number(0,1,2,3) and then according to the feature DER_mass_MMC
 print("Splitting the train data...")
 x_train, indexes_train = split_jet(x_train)
+x_train, indexes_train = split_mass(x_train, indexes_train)
 y_train = labels_jet(y_train, indexes_train)
 
 print("Splitting the test data...")
 x_test, indexes_test = split_jet(x_test)
+x_test, indexes_test = split_mass(x_test, indexes_test)
 y_test = labels_jet(y_test, indexes_test)
 
 print("Preprocessing the data...")
-x_train[0] = removeNaN(x_train[0])
-x_train[1] = removeNaN(x_train[1])
+x_train = removeNaN(x_train)
+x_test = removeNaN(x_test)
 
-x_test[0] = removeNaN(x_test[0])
-x_test[1] = removeNaN(x_test[1])
-# no nan values for jet 2 and jet 3
+x_train = addingFeatures(x_train)
+x_test = addingFeatures(x_test)
 
 
 MAX_ITER = 2000
+lambdas = [1000.0, 0.001, 100.0, 0.001, 100.0, 100.0, 0.001, 100.0]
 GAMMA = 1e-6
-lambdas = [0.001, 0.001, 0.001, 0.001]
-degrees = [3,3,3,3]
+degrees = [3,3,3,3,3,3,3,3]
 
-
-for jet_num in range (4):
+print("Finding the best weights and calculating predictions...")
+for jet_num in range (8):
 	# replacing the nan values in columns where they are <100% present
-	replaceNaN(x_train[jet_num])
+	#replaceNaN(x_train[jet_num])
 	
 	# standardizing the data
-	x_train[jet_num] = standardize(x_train[jet_num])
-	x_test[jet_num]  = standardize(x_test[jet_num])
+	x_train[jet_num], mean, std = standardize(x_train[jet_num])
+	x_test[jet_num],_,_  = standardize(x_test[jet_num],mean,std,True)
 	
 	# adding the offset term
-	tx_train[jet_num] = np.c_[np.ones((y_train[jet_num].shape[0], 1)), x_train[jet_num]]
-	tx_test[jet_num]  = np.c_[np.ones((y_test[jet_num].shape[0], 1)), x_test[jet_num]]
+	#x_train[jet_num] = np.c_[np.ones((y_train[jet_num].shape[0], 1)), x_train[jet_num]]
+	#x_test[jet_num]  = np.c_[np.ones((y_test[jet_num].shape[0], 1)), x_test[jet_num]]
 	
 	# feature expansion
-	tx_train[jet_num] = build_poly(tx_train[jet_num], degrees[jet_num])
-	tx_test[jet_num]  = build_poly(tx_test[jet_num], degrees[jet_num])
+	x_train[jet_num] = build_poly(x_train[jet_num], degrees[jet_num])
+	x_test[jet_num]  = build_poly(x_test[jet_num], degrees[jet_num])
 	
 	# initial w vector
-	initial_w = np.random.randn(tx_train[jet_num].shape[1])
+	initial_w = np.random.randn(x_train[jet_num].shape[1])
 	
 	# training the model
-	w, loss = reg_logistic_regression(y_train[jet_num], tx_train[jet_num], lambdas[jet_num], initial_w, MAX_ITER, GAMMA)
+	w, loss = logistic_regression(y_train[jet_num], x_train[jet_num], initial_w, MAX_ITER, GAMMA)
 	
 	# applying the w vector to the test data
-	test_results = predict_labels(w, tx_test[jet_num], True)
+	test_results = predict_labels(w, x_test[jet_num], True)
 	final[indexes_test[jet_num]] = test_results
 	
 	
@@ -75,3 +77,4 @@ print("Creating the csv file for submission...")
 create_csv_submission(ids_test, final, OUTPUT_PATH)
 
 print("DONE!")
+
