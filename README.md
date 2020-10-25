@@ -1,19 +1,54 @@
-# ML-2020
-PROJECT repository for Machine Learning course EPFL 2020
+# Project 1 : Higgs Boson Challenge
 
-project 1 
-	Start 24/09
-	Due   26/10
+Foobar is a Python library for dealing with word pluralization.
+
+## Folder Structure
+
+```
+
+.
+├── data                      # The data sets for the challenge
+│   ├── train.csv.zip
+│   └── test.csv.zip
+├── README.md                 # ReadMe file
+├── results                   # Results for the submission on Kaggle
+│   └── results.csv
+├── run.py                    # Script for 
+└── scripts
+    ├── cross_jet_0.txt
+    ├── ploting.py
+    ├── project1.ipynb
+    ├── Split_Jet.ipynb
+    ├── split_jet.py
+    ├── testing_parameters.py
+    ├── Test_Models.ipynb
+    └── utils
+        ├── crossvalidation.py
+        ├── features.py
+        ├── helpers.py
+        ├── implementations.py
+        ├── loss_gradient.py
+        ├── plots.py
+        └── preprocessing.py
+
+```
 
 
-Before git pull:
-	git status -> check what is changed
-	
-For removing the checkpoints:
-	git rm <checkpoint_path> 
+## Zipped Files
+Before running the code you will need to unzip the files containing the train and test data:
 
-I added the checkpoints into the .gitignore file, so when we add changed files to the repository we just use:
-	git add -u
-	
-Let's try this way, if there are errors we will find another solution.
-	
+* data/train.csv.zip     
+* data/test.csv.zip 
+
+## Running the code
+To run our code and get the final predictions you can use the following command:
+
+```python
+python3 run.py
+```
+
+
+## Authors
+* Marija Lazaroska     
+* Deborah Scherrer Ma  
+* Méline Zhao  
