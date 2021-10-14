@@ -6,7 +6,7 @@ This is a project realised for the Machine Learning Course [CS-433]. We were wor
 
 ```
 
-.
+project1
 ├── data                               # The train and test data sets
 │   ├── test.csv.zip
 │   └── train.csv.zip
